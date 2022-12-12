@@ -34,7 +34,7 @@ instance Component Counter CounterController CounterProps where
         Current: {value} <br />
         <button onclick="Counter.incrementAction(this)">Plus One</button>
         <hr />
-        <input type="number" value={inputValue value} onchange="action('SetCounterValue', { newValue: this.value }).debounce(300)"/>
+        <input type="number" value={inputValue value} onchange="Counter.setCounterValueAction(this)"/>
     |]
 
     -- The action handlers
@@ -54,8 +54,11 @@ renderScript = [hsx|
     <script>
         const Counter = {
             incrementAction: debounce((el) => {
-                callServerAction('IncrementCounterAction', null, el)
-            }, 100)
+              callServerAction('IncrementCounterAction', null, el);
+            },50),
+            setCounterValueAction: debounce((el) => {
+                callServerAction('SetCounterValue', { newValue: parseInt(el.value,10) }, el);
+            },50)
         } 
     </script>
 |]
